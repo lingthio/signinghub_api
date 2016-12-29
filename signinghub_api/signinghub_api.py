@@ -24,12 +24,15 @@ class SigningHubAPI(object):
         self.password = password
         self.scope = scope
         self.base_url = 'https://api.signinghub.com/v3/'
+        self.last_function_name = None
+        self.last_error_message = None
         pass
 
 
     # Returns the access_token on success.
     # Returns '' otherwise.
     def get_access_token(self):
+        self.last_function_name = 'SigningHubAPI.get_access_token'
         access_token = ''
         if self.client_id and self.client_secret and self.username and self.password:
             headers = {
@@ -52,15 +55,15 @@ class SigningHubAPI(object):
             if response.status_code in (200, 201):
                 data = response.json()
                 access_token = data.get('access_token')
+                self._print_success()
             else:
-                print_response_error('get_access_token', 'POST', url, headers, payload, response)
+                self._print_response_error('POST', url, headers, payload, response)
 
-        if LOCAL_DEBUG:
-            print('SigningHubAPI.get_access_token() returns access_token =', access_token)
         return access_token
 
 
     def add_package(self, access_token, package_name):
+        self.last_function_name = 'SigningHubAPI.add_package'
         package_id = 0
         if access_token:
             headers = {
@@ -78,15 +81,15 @@ class SigningHubAPI(object):
             if response.status_code in (200, 201):
                 json_data = response.json()
                 package_id = json_data.get('package_id')
+                self._print_success()
             else:
-                print_response_error('add_package', 'GET', url, headers, payload, response)
+                self._print_response_error('GET', url, headers, payload, response)
 
-        if LOCAL_DEBUG:
-            print('SigningHubAPI.add_package() returns package_id =', package_id)
         return package_id
 
 
     def upload_document_from_library(self, access_token, package_id, library_document_id):
+        self.last_function_name = 'SigningHubAPI.upload_document_from_library'
         document_id = 0
         if access_token:
             headers = {
@@ -101,15 +104,15 @@ class SigningHubAPI(object):
             if response.status_code in (200, 201):
                 json_data = response.json()
                 document_id = json_data.get('document_id')
+                self._print_success()
             else:
-                print_response_error('upload_document_from_library', 'POST', url, headers, None, response)
+                self._print_response_error('POST', url, headers, None, response)
 
-        if LOCAL_DEBUG:
-            print('SigningHubAPI.upload_document_from_library() returns document_id =', document_id)
         return document_id
 
 
     def rename_document(self, access_token, package_id, document_id, document_name):
+        self.last_function_name = 'SigningHubAPI.last_function_name'
         success = False
         if access_token:
             headers = {
@@ -126,16 +129,15 @@ class SigningHubAPI(object):
             # Process the response
             if response.status_code in (200, 201):
                 success = True
+                self._print_success()
             else:
-                print_response_error('rename_document', 'PUT', url, headers, payload, response)
-
-        if LOCAL_DEBUG:
-            print('SigningHubAPI.rename_document() returns success =', success)
+                self._print_response_error('PUT', url, headers, payload, response)
 
         return success
 
 
     def apply_workflow_template(self, access_token, package_id, document_id, template_name):
+        self.last_function_name = 'SigningHubAPI.apply_workflow_template'
         success = False
         if access_token:
             headers = {
@@ -153,16 +155,15 @@ class SigningHubAPI(object):
             # Process the response
             if response.status_code in (200, 201):
                 success = True
+                self._print_success()
             else:
-                print_response_error('apply_workflow_template', 'POST', url, headers, payload, response)
-
-        if LOCAL_DEBUG:
-            print('SigningHubAPI.apply_workflow_template() returns success =', success)
+                self._print_response_error('POST', url, headers, payload, response)
 
         return success
 
 
     def delete_package(self, access_token, package_id):
+        self.last_function_name = 'SigningHubAPI.delete_package'
         if access_token:
             headers = {
                 'Content-Type': 'application/json',
@@ -174,15 +175,16 @@ class SigningHubAPI(object):
 
             # Process the response
             if response.status_code in (200, 201):
-                pass
+                self._print_success()
             else:
-                print_response_error('delete_package', 'DELETE', url, headers, None, response)
+                self._print_response_error('DELETE', url, headers, None, response)
 
 
     # Get a list of library documents.
     # Returns a list of library document information records on success.
     # Returns None otherwise.
     def get_packages(self, access_token, folder='INBOX'):
+        self.last_function_name = 'SigningHubAPI.get_packages'
         packages = None
 
         # Retrieve a list of library documents
@@ -202,8 +204,9 @@ class SigningHubAPI(object):
             if response.status_code in (200, 201):
                 response_body = response.json()
                 packages = response_body
+                self._print_success()
             else:
-                print_response_error('get_packages', 'GET', url, headers, None, response)
+                self._print_response_error('GET', url, headers, None, response)
 
         return packages
 
@@ -212,18 +215,18 @@ class SigningHubAPI(object):
     # Returns the library document ID on success.
     # Returns None otherwise.
     def find_package_by_name(self, packages, package_name):
+        self.last_function_name = 'SigningHubAPI.find_package_by_name'
         package_id = None
         if packages:
             for package in packages:
                 if package['package_name'] == package_name:
                     package_id = package['package_id']
 
-        if LOCAL_DEBUG:
-            print('SigningHubAPI.find_package_by_name() returns package_id =', package_id)
         return package_id
 
 
     def update_workflow_user(self, access_token, package_id, user_email, user_name):
+        self.last_function_name = 'SigningHubAPI.update_workflow_user'
         success = False
         if access_token:
             headers = {
@@ -243,16 +246,15 @@ class SigningHubAPI(object):
             # Process the response
             if response.status_code in (200, 201):
                 success = True
+                self._print_success()
             else:
-                print_response_error('update_workflow_user', 'PUT', url, headers, payload, response)
-
-        if LOCAL_DEBUG:
-            print('SigningHubAPI.update_workflow_user() returns success =', success)
+                self._print_response_error('PUT', url, headers, payload, response)
 
         return success
 
 
     def get_document_fields(self, access_token, package_id, document_id):
+        self.last_function_name = 'SigningHubAPI.get_document_fields'
         fields = None
 
         # Retrieve a list of documents fields
@@ -270,37 +272,15 @@ class SigningHubAPI(object):
             if response.status_code in (200, 201):
                 response_body = response.json()
                 fields = response_body
+                self._print_success()
             else:
-                print_response_error('get_document_fields', 'GET', url, headers, None, response)
+                self._print_response_error('GET', url, headers, None, response)
 
         return fields
 
 
-    def share_document(self, access_token, package_id):
-        success = False
-        if access_token:
-            headers = {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + access_token,
-            }
-            url = self.base_url + 'packages/' + str(package_id) + '/workflow'
-            response = requests.post(url, headers=headers)
-
-            # Process the respon
-            # se
-            if response.status_code in (200, 201):
-                success = True
-            else:
-                print_response_error('share_document', 'POST', url, headers, None, response)
-
-        if LOCAL_DEBUG:
-            print('SigningHubAPI.share_document() returns success =', success)
-
-        return success
-
-
     def update_textbox_field(self, access_token, package_id, document_id, field_name, field_value):
+        self.last_function_name = 'SigningHubAPI.update_textbox_field'
         success = False
         if access_token:
 
@@ -314,7 +294,6 @@ class SigningHubAPI(object):
                     old_field = field
 
             if old_field:
-                print(json.dumps(old_field['dimensions'], indent=4))
                 headers = {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
@@ -337,20 +316,49 @@ class SigningHubAPI(object):
                 # Process the response
                 if response.status_code in (200, 201):
                     success = True
+                    self._print_success()
                 else:
-                    print_response_error('update_textbox_field', 'PUT', url, headers, payload, response)
-
-        if LOCAL_DEBUG:
-            print('SigningHubAPI.update_textbox_field() returns success =', success)
+                    self._print_response_error('PUT', url, headers, payload, response)
 
         return success
 
 
-def print_response_error(function_name, method, url, headers, payload, response):
-    print('SigningHubAPI.'+function_name+'() failed.')
-    print(method, url)
-    print('headers:', json.dumps(headers, indent=4))
-    if payload:
-        print('payload:', json.dumps(payload, indent=4))
-    print('status_code:', response.status_code)
-    print('response_body:', response.text)
+    def share_document(self, access_token, package_id):
+        self.last_function_name = 'SigningHubAPI.share_document'
+        success = False
+        if access_token:
+            headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Bearer ' + access_token,
+            }
+            url = self.base_url + 'packages/' + str(package_id) + '/workflow'
+            response = requests.post(url, headers=headers)
+
+            # Process the respon
+            # se
+            if response.status_code in (200, 201):
+                success = True
+                self._print_success()
+            else:
+                self._print_response_error('POST', url, headers, None, response)
+
+        return success
+
+
+    def _print_success(self):
+        self.last_error_message = None
+        if LOCAL_DEBUG:
+            print(self.last_function_name+'() completed successfully.')
+
+
+    def _print_response_error(self, method, url, headers, payload, response):
+        self.last_error_message = response.json().get('Message', 'Unknown error')
+        if LOCAL_DEBUG:
+            print(self.last_function_name+'() failed.')
+            print(method, url)
+            print('headers:', json.dumps(headers, indent=4))
+            if payload:
+                print('payload:', json.dumps(payload, indent=4))
+            print('status_code:', response.status_code)
+            print('error_message:', self.last_error_message)
