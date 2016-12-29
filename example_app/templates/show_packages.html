@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2><a href="/?token={{ access_token }}">SingingHub Example</a> - Show Packages</h2>
+{% if packages %}
+    {% for package in packages %}
+        {{ package['package_id'] }}: {{ package['package_status'] }}: {{ package['package_name'] }}</br>
+    {% endfor %}
+{% else %}
+    <p>No packages found.</p>
+{% endif %}
+
+<br/>
+<p><a href="/?token={{ access_token }}">Return Home</a></p>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2><a href="/?token={{ access_token }}">SingingHub Example</a> - Home</h2>
+
+<!-- Link that triggers please wait modal, and goes to that link -->
+<p><a href="{{ url_for('new_token') }}" onclick="$('#modal_pane1').modal('show'); return true;">
+    Request a new Access Token</a></p>
+
+{% if access_token %}
+    <p>Access Token = {{ access_token }}<p>
+
+    <!-- Link that triggers please wait modal, and goes to that link -->
+    <p><a href="/show_packages?token={{ access_token }}" onclick="$('#modal_pane2').modal('show'); return true;">
+        Show Packages</a></p>
+
+    <!-- Link that triggers please wait modal, and goes to that link -->
+    <p><a href="/show_iframe?token={{ access_token }}" onclick="$('#modal_pane2').modal('show'); return true;">
+        Show IFrame</a></p>
+{% endif %}
+
+<!-- Please wait modal -->
+<div id="modal_pane1"class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Please wait</h4>
+      </div>
+      <div class="modal-body">
+        <p>We are authenticating and requesting a new access token...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Please wait modal -->
+<div id="modal_pane2"class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Please wait</h4>
+      </div>
+      <div class="modal-body">
+        <p>We are preparing your request...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
