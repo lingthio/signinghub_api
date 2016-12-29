@@ -7,7 +7,7 @@ from __future__ import print_function
 import requests
 import json
 
-LOCAL_DEBUG = True                      # Print local debug info or not
+LOCAL_DEBUG = False                      # Print local debug info or not
 API_BASE_URL = 'api/rest/v5/'
 
 
@@ -112,7 +112,7 @@ class SigningHubAPI(object):
 
 
     def rename_document(self, access_token, package_id, document_id, document_name):
-        self.last_function_name = 'SigningHubAPI.last_function_name'
+        self.last_function_name = 'SigningHubAPI.rename_document'
         success = False
         if access_token:
             headers = {
@@ -279,20 +279,18 @@ class SigningHubAPI(object):
         return fields
 
 
-    def update_textbox_field(self, access_token, package_id, document_id, field_name, field_value):
+    def update_textbox_field(self, access_token, package_id, document_id, fields, field_name, field_value):
         self.last_function_name = 'SigningHubAPI.update_textbox_field'
         success = False
+
+        # Find field by name
         if access_token:
-
-            # Retrieve all fields
-            fields = self.get_document_fields(access_token, package_id, document_id)
-
-            # Find field by name
             old_field = None
             for field in fields['text']:
                 if field['field_name']==field_name:
                     old_field = field
 
+            # Use old field settings with new value
             if old_field:
                 headers = {
                     'Content-Type': 'application/json',
@@ -300,15 +298,17 @@ class SigningHubAPI(object):
                     'Authorization': 'Bearer ' + access_token,
                 }
                 payload = {
+                    # Old field settings
                     'field_name': field_name,
                     'page_no': old_field['page_no'],
                     'placeholder': old_field['placeholder'],
-                    'value': field_value,
                     'max_length': old_field['max_length'],
                     'field_type': old_field['type'],
                     'validation_rule': old_field['validation_rule'],
                     'font': old_field['font'],
                     'dimensions': old_field['dimensions']['field'],
+                    # New field value
+                    'value': field_value,
                 }
                 url = self.base_url + 'packages/' + str(package_id) + '/documents/' + str(document_id) + '/fields/text'
                 response = requests.put(url, headers=headers, json=payload)
@@ -348,17 +348,17 @@ class SigningHubAPI(object):
 
     def _print_success(self):
         self.last_error_message = None
-        if LOCAL_DEBUG:
-            print(self.last_function_name+'() completed successfully.')
+        print(self.last_function_name+'() completed successfully.')
 
 
     def _print_response_error(self, method, url, headers, payload, response):
         self.last_error_message = response.json().get('Message', 'Unknown error')
+        print('ERROR: '+self.last_function_name+'() failed.')
+        print('error_message:', self.last_error_message)
+
         if LOCAL_DEBUG:
-            print(self.last_function_name+'() failed.')
             print(method, url)
             print('headers:', json.dumps(headers, indent=4))
             if payload:
                 print('payload:', json.dumps(payload, indent=4))
             print('status_code:', response.status_code)
-            print('error_message:', self.last_error_message)
