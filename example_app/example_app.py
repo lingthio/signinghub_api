@@ -70,6 +70,7 @@ def show_packages():
     # Show error message if needed
     if signinghub_api.last_error_message:
         return render_template('show_error_message.html',
+                               access_token=access_token,
                                last_function_name=signinghub_api.last_function_name,
                                last_error_message=signinghub_api.last_error_message)
     # Render the list of documents
@@ -121,6 +122,7 @@ def show_iframe():
     # Show error message if needed
     if signinghub_api.last_error_message:
         return render_template('show_error_message.html',
+                               access_token=access_token,
                                last_function_name=signinghub_api.last_function_name,
                                last_error_message=signinghub_api.last_error_message)
 
