@@ -8,7 +8,7 @@
     Request a new Access Token</a></p>
 
 {% if access_token %}
-    <p>Access Token = {{ access_token }}<p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Access Token = {{ access_token[0:10] }}......{{ access_token[-10:] }}<p>
 
     <!-- Link that triggers please wait modal, and goes to that link -->
     <p><a href="/show_packages?token={{ access_token }}" onclick="$('#modal_pane2').modal('show'); return true;">
@@ -16,7 +16,7 @@
 
     <!-- Link that triggers please wait modal, and goes to that link -->
     <p><a href="/show_iframe?token={{ access_token }}" onclick="$('#modal_pane2').modal('show'); return true;">
-        Show IFrame</a></p>
+        Prepare and Sign Agreement</a></p>
 {% endif %}
 
 <!-- Please wait modal -->

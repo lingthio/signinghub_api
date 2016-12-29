@@ -96,7 +96,8 @@ def show_iframe():
 
         # Rename document
         if document_id:
-            success = signinghub_api.rename_document(access_token, package_id, document_id, package_name)
+            document_name = package_name
+            success = signinghub_api.rename_document(access_token, package_id, document_id, document_name)
 
             # Add a template
             if success:
@@ -109,7 +110,8 @@ def show_iframe():
                 print('Fields:', json.dumps(fields, indent=4))
 
                 # Pre-fill the text field
-                success = signinghub_api.update_textbox_field(access_token, package_id, document_id, recipient_field_name, recipient_field_value)
+                success = signinghub_api.update_textbox_field(access_token, package_id, document_id,
+                        fields, recipient_field_name, recipient_field_value)
 
             # Add signer
             if success:
@@ -136,6 +138,16 @@ def show_iframe():
 # SigningHub Callback, called after a user finishes the IFrame
 @app.route('/signinghub/callback')    # Must match SigningHub's Application call-back URL setting
 def signinghub_callback():
+    # Retrieve callback info from the query parameters
+    access_token = request.args.get('token')
+    package_id = request.args.get('document_id')    # legacy parameter name. It really points to the Package.
+    language_code = request.args.get('language')
+    user_email = request.args.get('user_email')
+
     # Render a finished message
-    return render_template('finished.html')
+    return render_template('finished.html',
+                           access_token=access_token,
+                           package_id=package_id,
+                           language_code=language_code,
+                           user_email=user_email)
 

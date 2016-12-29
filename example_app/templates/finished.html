@@ -2,8 +2,21 @@
 
 {% block content %}
 <h2><a href="/?token={{ access_token }}">SingingHub Example</a> - Finished</h2>
-Thank you for signing our Agreement.
+<p>Thank you for signing our Agreement.</p>
 
 <br/>
 <p><a href="/?token={{ access_token }}">Return Home</a></p>
+
+<!-- This code kills the IFrame if it is currently rendered in the IFrame window,
+     then redirects its location so it is rendered in the top window instead. -->
+<style>html { display:none; }</style> <!-- hide content for now -->
+<script>
+   if(self == top) {
+       // If rendered in the top window, show this content in the top window
+       document.documentElement.style.display = 'block';
+   } else {
+       // If rendered in the IFrame window, redirect to the top window
+       top.location = self.location;
+   }
+</script>
 {% endblock %}

@@ -1,11 +1,13 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h2><a href="/?token={{ access_token }}">SingingHub Example</a> - Error Message</h2>
+<h2><a href="/?token={{ access_token }}">SingingHub Example</a></h2>
 
-<p>An error occurred while preparing the document.</p>
-<p>Function: {{ last_function_name}}().</p>
-<p>Error message: {{ last_error_message }}.</p>
+<div class="alert alert-danger" role="alert">
+    <h3 class="panel-title">{{ last_function_name}}() returned an Error:</h3>
+    <br/>
+    "{{ last_error_message }}"
+</div>
 
 <br/>
 <p><a href="/?token={{ access_token }}">Return Home</a></p>
