@@ -51,10 +51,11 @@ It is assumed that you have virtualenv and virtualenvwrapper installed and confi
 
 Configuring SigningHub
 ======================
+Add a SigningHub API Application:
 
 - Create an account at signinghub.com
 - Dashboard > Enterprise Actions > API Key
-- Add (Blue plus sign)
+- Add an Application (Blue plus sign)
 
   - Application Name: ExampleApp                             # This is your SIGNINGHUB_CLIENT_ID
   - Call-back URL: http://localhost:5000/signinghub/callback # Example app must serve this URL
@@ -112,6 +113,8 @@ Starting the web application
 
 You can now point your browser to: http://localhost:5000/
 
+Prepare and Sign a Document
+===========================
 Click on 'Get new Access Token'
 
 Click on 'Prepare and Sign Document'. This will perform this sequence:
@@ -126,7 +129,7 @@ Click on 'Prepare and Sign Document'. This will perform this sequence:
 - Share Document
 - Display document in IFrame
 
-After the user signs the document, SigningHub calls the configured Application API callback URL::
+After the user signs the document, SigningHub redirects to the configured Application API callback URL::
 
     https://localhost:5000/signinghub/callback
         ?access_token=...
@@ -134,6 +137,11 @@ After the user signs the document, SigningHub calls the configured Application A
         &language=...
         &user_email=...
 
+Previosly, the ``document_id`` could be stored in a persistent object, along with an 'UNSIGNED' status.
+
+Here, the ``document_id`` query parameter can be used to retrieve that object and mark it as signed.
+
+Javascript is used to close the IFrame window and render a page in the top window.
 
 Contributors
 ============
