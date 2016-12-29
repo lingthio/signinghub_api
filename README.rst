@@ -1,9 +1,18 @@
 Synopsis
 ========
 
-This is code example illustrates the use of the SiningHub API.
+This code example illustrates the use of the SigningHub API
+by implementing a simple Flask web application that:
 
-See http://manuals.ascertia.com/SigningHub-apiguide/default.aspx
+- prepares a Document,
+- shows that Document in an IFrame (SigningHub Tight Integration), and
+- prompts the user to sign that Document.
+
+| SigningHub API documetation:
+| http://manuals.ascertia.com/SigningHub-apiguide/default.aspx
+
+| SigningHub Tight Integration documentation:
+| https://www.signinghub.com/wp-content/uploads/2015/09/SigningHub-Quick-Integration-Guide.pdf
 
 
 Motivation
@@ -14,13 +23,13 @@ I struggled trying to figure out which API calls to make and in what sequence.
 I'm sharing this code example to provide a code illustration to other developers.
 
 Though this code example is in Python (using the Flask application framework),
-it still illustrates the API for developers in other programming languages.
+it illustrates the API for developers using other programming languages.
 
 
 Code organization
 =================
-* ``signinghub_api`` contains a simple wrapper for the SigningHub API.
-* ``example_app`` contains a simple Flask application that calls the wrapper.
+* ``signinghub_api/`` contains a simple wrapper for the SigningHub API.
+* ``example_app/`` contains a simple Flask application that calls the wrapper.
 * ``runserver.py`` starts a development web server that serves the Flask application.
 
 
@@ -33,14 +42,15 @@ It is assumed that you have virtualenv and virtualenvwrapper installed and confi
     git clone git@github.com:lingthio/signinghub_api.git signinghub_api
 
     # Create a virtualenv
-    mkvirtualenv signinghub_api -p path/to/python
-    cd signinghub_api
+    mkvirtualenv signinghub_api -p /full/path/to/python
+
+    # Install required python packages (Flask and requests)
+    cd ~/dev/signinghub_api
     pip install -r requirements.txt
 
 
-Configuration
-=============
-Configure Signing Hub
+Configuring SigningHub
+======================
 
 - Create an account at signinghub.com
 - Dashboard > Enterprise Actions > API Key
@@ -51,7 +61,7 @@ Configure Signing Hub
   - Default Authentication Method: SigningHub ID
   - Generate the API Key                                     # This is your SIGNINGHUB_CLIENT_SECRET
 
-Add a SigningHub Library Document
+Add a SigningHub Library Document:
 
 - Dashboard > Quick Action > Templates
 - Under ``My Settings``, click on ``Library``
@@ -60,7 +70,7 @@ Add a SigningHub Library Document
 - Click ``SAVE``
 - Make note of the Library Document ID (shows up in the document list, after you click ``SAVE``)
 
-Add a SigningHub Template
+Add a SigningHub Template:
 
 - Dashboard > Quick Action > Templates
 - Add a Template (blue plus sign)
@@ -76,16 +86,18 @@ Add a SigningHub Template
 - Click on ``Done`` (top right)
 - Make a note of the Template name
 
-Configure the example web application::
+
+Configure the Example App
+=========================
+Copy the example settings to a local file::
 
     cd ~/dev/signinghub_api/example_app
     mv local_settings_example.py local_settings.py
 
-Edit the local_settings.py
-- Change the example settings to reflect your SigningHub account, document and template settings
+Edit ``example_app/local_settings.py`` to reflect your SigningHub account, document and template settings:
+
 - ``SIGNINGHUB_CLIENT_ID`` must reflect the Application name created in the previous section.
 - ``SIGNINGHUB_CLIENT_SECRET`` must reflect the Application API Key created in the previous section.
-- ``SIGNINGHUB_TEMPLATE_NAME`` must reflect the Template name created in the previous section.
 - ``SIGNINGHUB_LIBRARY_DOCUMENT_ID`` must reflect the Library Document ID created in the previous section.
 - ``SIGNINGHUB_TEMPLATE_NAME`` must reflect the Template name created in the previous section.
 
@@ -100,7 +112,31 @@ Starting the web application
 
 You can now point your browser to: http://localhost:5000/
 
+Click on 'Get new Access Token'
+
+Click on 'Prepare and Sign Document'. This will perform this sequence:
+
+- Add Package
+- Upload Document from Library
+- Rename Document
+- Apply Workflow Template
+- Get Document Fields
+- Update Document Field
+- Update Workflow User
+- Share Document
+- Display document in IFrame
+
+After the user signs the document, SigningHub calls the configured Application API callback URL::
+
+    https://localhost:5000/signinghub/callback
+        ?access_token=...
+        &document_id=...
+        &language=...
+        &user_email=...
+
 
 Contributors
 ============
 Ling Thio - ling.thio AT gmail.com
+
+Did you find this useful? Consider tipping me or sending me a thank you email!
