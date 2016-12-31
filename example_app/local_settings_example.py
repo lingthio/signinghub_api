@@ -7,7 +7,7 @@ SIGNINGHUB_SCOPE = SIGNINGHUB_USERNAME                  # Authorization scope
 
 # Document information
 SIGNINGHUB_LIBRARY_DOCUMENT_ID = 1234                   # Must match the ID of a SigningHub Library Document
-SIGNINGHUB_TEMPLATE_NAME = 'ExampleContractTemplate'    # Must match the name of a SingingHub Template
+SIGNINGHUB_TEMPLATE_NAME = 'ExampleContractTemplate'    # Must match the name of a SigningHub Template
 
 # Information about the Recipient that signs the document
 RECIPIENT_USER_NAME = 'Your Name'

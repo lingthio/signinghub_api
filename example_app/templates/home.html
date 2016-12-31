@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<h2><a href="/?token={{ access_token }}">SingingHub Example</a> - Home</h2>
+<h2><a href="/?token={{ access_token }}">SigningHub Example</a> - Home</h2>
 
 <!-- Link that triggers please wait modal, and goes to that link -->
 <p><a href="{{ url_for('new_token') }}" onclick="$('#modal_pane1').modal('show'); return true;">
