@@ -49,11 +49,11 @@ It is assumed that you have virtualenv and virtualenvwrapper installed and confi
     pip install -r requirements.txt
 
 
-Configuring SigningHub
-======================
+Configuring SigningHub API Application
+======================================
 Add a SigningHub API Application:
 
-- Create an account at signinghub.com
+- Create an account at signinghub.com and log in
 - Dashboard > Enterprise Actions > API Key
 - Add an Application (Blue plus sign)
 
@@ -93,9 +93,9 @@ Configure the Example App
 Copy the example settings to a local file::
 
     cd ~/dev/signinghub_api/example_app
-    mv local_settings_example.py local_settings.py
+    cp local_settings_example.py local_settings.py
 
-Edit ``example_app/local_settings.py`` to reflect your SigningHub account, document and template settings:
+Edit ``local_settings.py`` to reflect your SigningHub settings:
 
 - ``SIGNINGHUB_CLIENT_ID`` must reflect the Application name created in the previous section.
 - ``SIGNINGHUB_CLIENT_SECRET`` must reflect the Application API Key created in the previous section.
@@ -112,6 +112,7 @@ Starting the web application
     python runserver.py
 
 You can now point your browser to: http://localhost:5000/
+
 
 Prepare and Sign a Document
 ===========================
@@ -142,6 +143,13 @@ Previosly, the ``document_id`` could be stored in a persistent object, along wit
 Here, the ``document_id`` query parameter can be used to retrieve that object and mark it as signed.
 
 Javascript is used to close the IFrame window and render a page in the top window.
+
+See also
+========
+
+- adobe_sign_api: https://github.com/lingthio/adobe_sign_api
+- hellosign_api: https://github.com/lingthio/hellosign_api
+
 
 Contributors
 ============
