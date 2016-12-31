@@ -8,9 +8,9 @@ by implementing a simple Flask web application that:
 - shows that Document in an IFrame (SigningHub Tight Integration), and
 - prompts the user to sign that Document.
 
-| SigningHub API documetation:
+| SigningHub API documentation:
 | http://manuals.ascertia.com/SigningHub-apiguide/default.aspx
-
+|
 | SigningHub Tight Integration documentation:
 | https://www.signinghub.com/wp-content/uploads/2015/09/SigningHub-Quick-Integration-Guide.pdf
 
