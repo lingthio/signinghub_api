@@ -101,7 +101,7 @@ def show_iframe():
 
             # Add a template
             if success:
-                template_name = 'ExampleAgreementTemplate'
+                template_name = signinghub_template_name
                 success = signinghub_api.apply_workflow_template(access_token, package_id, document_id, template_name)
 
             # print fields, so that we can determine the name of the text field
